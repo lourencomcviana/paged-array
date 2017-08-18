@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible Node.js debug attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            
+            "name": "DEBUG",
+            "outFiles": ["${workspaceRoot}/bin/**/*.js"],
+            "program": "${workspaceRoot}/src/main.ts",
+            "console": "internalConsole",
+            //"preLaunchTask": "build",
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "protocol": "inspector",
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "request": "launch",
+            "type": "node"
+        },
+        
+        {
+            "name": "Attach",
+            "type": "node",
+            "request": "attach",
+            "port": 5858
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}/PagedArray.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test Program",
+            "program": "${workspaceRoot}/test.js"
+        }
+    ]
+}

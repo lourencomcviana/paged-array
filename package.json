@@ -1,0 +1,37 @@
+{
+  "name": "paged-array",
+  "version": "1.0.0",
+  "description": "an extension of the array class. Enables paging by default and give you tools to make large data processing possible",
+  "main": "./dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lourencomcviana/paged-array.git"
+  },
+  "keywords": [
+    "paging",
+    "array",
+    "large-data"
+  ],
+  "author": "lourenco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lourencomcviana/paged-array/issues"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "progress": "^2.0.0"
+  },
+  "homepage": "https://github.com/lourencomcviana/paged-array#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-rimraf": "^0.2.1",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-typescript": "^3.2.1",
+    "gulp-util": "^3.0.8",
+    "typescript": "^2.4.2",
+    "watchify": "^3.9.0"
+  }
+}
