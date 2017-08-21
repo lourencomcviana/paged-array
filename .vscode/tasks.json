@@ -26,6 +26,15 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "taskName": "test",
+            "type": "process",
+            "command": "jasmine",
+            "args": [
+                // Ask msbuild to generate full paths for file names.
+                "compile"
+            ]
         }
         // {
         //     "type": "typescript",

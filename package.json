@@ -26,11 +26,15 @@
   },
   "homepage": "https://github.com/lourencomcviana/paged-array#readme",
   "devDependencies": {
+    "@types/bluebird": "^3.5.8",
+    "@types/progress": "^2.0.0",
     "gulp": "^3.9.1",
+    "gulp-jasmine": "^2.4.2",
     "gulp-rimraf": "^0.2.1",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-typescript": "^3.2.1",
-    "gulp-util": "^3.0.8",
+    "jasmine": "^2.7.0",
+    "jasmine-core": "^2.7.0",
     "typescript": "^2.4.2",
     "watchify": "^3.9.0"
   }
