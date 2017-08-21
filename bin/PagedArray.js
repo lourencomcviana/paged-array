@@ -2,30 +2,43 @@
 // export function sayHello(name: string) {
 //     return `Hello from ${name}`;
 // }
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 // export function another (name: string) {
 //     return `Hasassaas ${name}`;
 // }
-const Promise = require("bluebird");
+var Promise = require("bluebird");
 function instanceOfRunFunction(object) {
     return true;
 }
 //temporario
-class Progress {
-    constructor(fun) {
+var Progress = (function () {
+    function Progress(fun) {
         this.start = function (le) { };
         this.run = function () { };
         this.show = function () { };
     }
-}
-class PagedArray extends Array {
-    constructor(parameterList, options) {
-        super();
-        this.config = PagedArray.ProcessOptions(options);
-        this.config.current = 0;
-        this.parameterList = parameterList;
+    return Progress;
+}());
+var PagedArray = (function (_super) {
+    __extends(PagedArray, _super);
+    function PagedArray(parameterList, options) {
+        var _this = _super.call(this) || this;
+        _this.config = PagedArray.ProcessOptions(options);
+        _this.config.current = 0;
+        _this.parameterList = parameterList;
+        return _this;
     }
-    genInfo() {
+    PagedArray.prototype.genInfo = function () {
         return {
             parameters: this.parameters,
             pageSize: this.pageSize,
@@ -35,9 +48,9 @@ class PagedArray extends Array {
             pageStart: this.pageStart,
             pageEnd: this.pageEnd
         };
-    }
-    static ProcessOptions(options) {
-        let model = {
+    };
+    PagedArray.ProcessOptions = function (options) {
+        var model = {
             size: 100,
             run: undefined,
             progress: undefined,
@@ -54,63 +67,91 @@ class PagedArray extends Array {
             return options;
         }
         return model;
-    }
-    get parameters() {
-        return this.parameterList;
-    }
-    get pageSize() {
-        return this.config.size;
-    }
-    get pageCurrent() {
-        return this.config.current;
-    }
-    get pageTotal() {
-        return Math.ceil(this.parameters.length / this.pageSize);
-    }
-    get pageItemRange() {
-        let itemSize = this.pageSize * this.pageCurrent;
-        return {
-            min: itemSize,
-            max: itemSize + this.pageSize
-        };
-    }
-    get pageStart() {
-        return this.pageSize * this.pageCurrent;
-    }
-    get pageEnd() {
-        let end = this.pageStart + this.pageSize;
-        return end > this.parameters.length ? this.parameters.length : end;
-    }
-    hasNext() {
+    };
+    Object.defineProperty(PagedArray.prototype, "parameters", {
+        get: function () {
+            return this.parameterList;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PagedArray.prototype, "pageSize", {
+        get: function () {
+            return this.config.size;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PagedArray.prototype, "pageCurrent", {
+        get: function () {
+            return this.config.current;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PagedArray.prototype, "pageTotal", {
+        get: function () {
+            return Math.ceil(this.parameters.length / this.pageSize);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PagedArray.prototype, "pageItemRange", {
+        get: function () {
+            var itemSize = this.pageSize * this.pageCurrent;
+            return {
+                min: itemSize,
+                max: itemSize + this.pageSize
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PagedArray.prototype, "pageStart", {
+        get: function () {
+            return this.pageSize * this.pageCurrent;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PagedArray.prototype, "pageEnd", {
+        get: function () {
+            var end = this.pageStart + this.pageSize;
+            return end > this.parameters.length ? this.parameters.length : end;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PagedArray.prototype.hasNext = function () {
         return (this.pageCurrent < this.pageTotal - 1);
-    }
-    hasPrevious() {
+    };
+    PagedArray.prototype.hasPrevious = function () {
         return (this.pageCurrent > 0);
-    }
-    next() {
+    };
+    PagedArray.prototype.next = function () {
         if (this.hasNext()) {
             this.config.current++;
             this.load();
             return true;
         }
         return false;
-    }
-    previous() {
+    };
+    PagedArray.prototype.previous = function () {
         if (this.hasPrevious()) {
             this.config.current--;
             this.load();
             return true;
         }
         return false;
-    }
-    load(progress) {
+    };
+    PagedArray.prototype.load = function (progress) {
         this.length = 0;
         if (!progress || typeof (progress) == 'function')
             progress = new Progress(this.config.progress);
         progress = progress;
         progress.start(this.pageEnd - this.pageStart);
-        for (let idItem = this.pageStart; idItem < this.pageEnd; idItem++) {
-            let result;
+        for (var idItem = this.pageStart; idItem < this.pageEnd; idItem++) {
+            var result = void 0;
             try {
                 result = this.config.run(this.parameterList[idItem], this.genInfo()); //fs.readprametersync(this.prameters[idItem]);
             }
@@ -120,8 +161,8 @@ class PagedArray extends Array {
             this.push(result);
             progress.run();
         }
-    }
-    forEach(callbackfn, thisArg) {
+    };
+    PagedArray.prototype.forEach = function (callbackfn, thisArg) {
         function recursivePromise(arr) {
             //walk from page to page
             Promise.all(arr)
@@ -134,13 +175,14 @@ class PagedArray extends Array {
         }
         this.config.current = 0;
         //run all parameters
-        let progress = new Progress(this.config.progress);
+        var progress = new Progress(this.config.progress);
         progress.start(this.parameters.length);
         this.load();
         recursivePromise(this);
-    }
+    };
     ;
-}
+    return PagedArray;
+}(Array));
 exports.default = PagedArray;
 
 //# sourceMappingURL=PagedArray.js.map

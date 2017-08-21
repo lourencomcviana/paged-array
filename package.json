@@ -1,7 +1,7 @@
 {
   "name": "paged-array",
   "version": "1.0.0",
-  "description": "an extension of the array class. Enables paging by default and give you tools to make large data processing possible",
+  "description": "paged-array is an extension of the basic array class. Enables paging by default and give you tools to make large and lazy data processing easyer",
   "main": "./dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

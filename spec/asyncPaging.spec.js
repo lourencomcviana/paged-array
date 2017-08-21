@@ -27,7 +27,5 @@ describe("paging-create", function () {
       expect(data).toBe(1);
       done();
     });
-   
-
   });
 });  

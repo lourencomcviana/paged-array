@@ -46,12 +46,8 @@ describe("paging-previous", function () {
     //var product = calculator.multiply(2, 3);
 
     var arr=dummyPageArray();
-    var result =false;;
-    arr.forEach(function(element,id) {
-      if(element[id]!=testArr[id]){
-        
-      }
-    }, this);;
+
+    arr.previous();
     expect(arr.length).toBe(2);
   });
 });  

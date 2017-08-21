@@ -1,7 +1,3 @@
-// import { sayHello } from "./PagedArray";
-
-// console.log(sayHello("TypeScript"));
-
 import  PagedArray from "./PagedArray";
 
 var arr=new PagedArray(["maria","123","maria","123","maria","123","maria","123"],{
