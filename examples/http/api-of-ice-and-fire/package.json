@@ -1,0 +1,15 @@
+{
+  "name": "api-of-ice-and-fire",
+  "version": "1.0.0",
+  "description": "example of why and how to use paged-array",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "request-promise": "^4.2.1",
+    "request": "^2.81.0"
+  }
+}
