@@ -1,11 +1,3 @@
-// export function sayHello(name: string) {
-//     return `Hello from ${name}`;
-// }
-
-
-// export function another (name: string) {
-//     return `Hasassaas ${name}`;
-// }
 import Promise =require( 'bluebird');
 
 import * as ProgressBar from "progress";
@@ -181,11 +173,10 @@ export default class PagedArray extends Array implements PageInfo {
         let result:string |number | object | Promise<any>;
 
         try{
-          result = this.config.run(this.parameterList[idItem],this.genInfo());//fs.readprametersync(this.prameters[idItem]);
+          result = this.config.run(this.parameterList[idItem],this.genInfo());
         }catch(e){
           result = e;
         }
-
 
         this.push(result);
         progress.run();
