@@ -7,16 +7,13 @@
 //The api supports paging of 50 items max
 const PagedArray  =require("../../../bin/PagedArray").default;
 const request  = require('request-promise');;
-let params=[];
-
-for(let id =1;id<=200;id++ ){
-  params.push(id);
-}
 
 const options ={
   size:50,
-  run:function(id){
-    return request('https://www.anapioficeandfire.com/api/characters/'+id)
+  clientPaging:true,
+  run:function(param,info){
+
+    return request('https://www.anapioficeandfire.com/api/characters?pageSize='+info.pageSize+'&page='+info.pageCurrent+1)
     .then(function(body){
       return JSON.parse(body);
     })
@@ -26,18 +23,22 @@ const options ={
   }
 }
 
-let array = new PagedArray(params,options);
+//load two pages
+let array = new PagedArray(2,options);
 
 //load first page with 50 characters
 array.load();
-show(array[0])
+
+show(array[0],1)
+show(array[1],1)
+show(array[49],1)
 
 //load second page with 50 characters
 array.next();
-show(array[0])
+show(array[0],2)
 
-function show(promisse){
+function show(promisse,page){
   promisse.then(function(data){
-    console.log(data.name?data.name:data.aliases)
+    console.log((data.name?data.name:data.aliases)+' p: '+page)
   });
 }
