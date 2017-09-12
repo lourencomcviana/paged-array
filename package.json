@@ -22,7 +22,9 @@
   },
   "dependencies": {
     "bluebird": "^3.5.0",
-    "progress": "^2.0.0"
+    "progress": "^2.0.0",
+    "promise": "^8.0.1",
+    "request": "^2.81.0"
   },
   "homepage": "https://github.com/lourencomcviana/paged-array#readme",
   "devDependencies": {
