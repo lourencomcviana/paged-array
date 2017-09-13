@@ -10,5 +10,8 @@ Instead of running your memory hungry function and put the results in a huge arr
 
 ## Example
 
+- [Api of ice and fire](https://github.com/lourencomcviana/paged-array/blob/master/examples/http/api-of-ice-and-fire/README.md):
+  Use paged-array to manage one http api
+
 ## Compatibility
 The transpiled objects only work with ecmascript 6. It is possible that i could make it compatible with ecmascript 5 but only if someone truly wants it.
