@@ -232,16 +232,18 @@ export default class PagedArray extends Array implements PageInfo {
     }
   }
 
-  forEach(callbackfn:any,thisArg?:any){
+  forEach(callbackfn:any,thisArg?:any): Promise<any>{
     
-    function recursivePromise(arr:PagedArray){
+    function recursivePromise(arr:PagedArray): Promise<any>{
       //walk from page to page
-      Promise.all(arr)
+      return Promise.all(arr)
       .then(function(data){
-        data.forEach(callbackfn,thisArg)
+        //data is not a paged-array, it is a normal array
+        data.forEach(callbackfn,thisArg);
         if(arr.next()){
-          recursivePromise(arr);
+          return recursivePromise(arr);
         }
+        return data;
       });
     }
     this.config.current=0;
@@ -252,6 +254,6 @@ export default class PagedArray extends Array implements PageInfo {
     this.load();
 
     
-    recursivePromise(this);
+    return recursivePromise(this);
   };
 }
