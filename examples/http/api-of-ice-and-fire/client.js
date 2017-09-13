@@ -8,12 +8,12 @@
 const PagedArray  =require("../../../bin/PagedArray").default;
 const request  = require('request-promise');;
 
+const baseUrl='https://www.anapioficeandfire.com/api/characters'
 const options ={
   size:50,
   clientPaging:true,
   run:function(param,info){
-
-    return request('https://www.anapioficeandfire.com/api/characters?pageSize='+info.pageSize+'&page='+info.pageCurrent+1)
+    return request(baseUrl+'?pageSize='+info.pageSize+'&page='+info.pageCurrent+1)
     .then(function(body){
       return JSON.parse(body);
     })
@@ -27,15 +27,22 @@ const options ={
 let array = new PagedArray(2,options);
 
 //load first page with 50 characters
-array.load();
+// array.load();
 
-show(array[0],1)
-show(array[1],1)
-show(array[49],1)
+// show(array[0],1)
+// show(array[1],1)
+// show(array[49],1)
 
-//load second page with 50 characters
-array.next();
-show(array[0],2)
+// //load second page with 50 characters
+// array.next();
+// show(array[0],2)
+
+array.forEach(function(promise){
+  promise.then(function(data){
+    console.log((data.name?data.name:data.aliases)+' p: '+page);
+  })
+  
+});
 
 function show(promisse,page){
   promisse.then(function(data){
