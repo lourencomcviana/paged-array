@@ -21,6 +21,9 @@ var arr=new PagedArray(
     }
 );
 
+
+arr.load();
+
 arr.forEach(function(item,id){
     console.log(item);
 
