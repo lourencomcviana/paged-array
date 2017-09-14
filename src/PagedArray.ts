@@ -1,6 +1,5 @@
 import Promise =require( 'bluebird');
 
-import * as ProgressBar from "progress";
 
 
 interface ItemRange{
@@ -21,17 +20,13 @@ interface PageInfo{
 interface RunFunction{
     (parameter: any, info?:PageInfo):string |number | object | Promise<any>;
 }
-interface ProgressFunction{
-    (data: any):void;
-}
+
 
 interface Options{
     [index: string]: any;
     clientPaging?:boolean,
     size?:number;
     run:RunFunction;
-    //Will replace with Progress later, converting to typescript
-    progress?:ProgressFunction;
 }
 
 
@@ -41,17 +36,6 @@ interface Config extends Options{
 
 function instanceOfRunFunction(object: any): object is RunFunction{
     return true;
-}
-
-//temporario
-class Progress{
-    constructor(fun :ProgressFunction){
-
-    }
-
-    start=function(le:number){};
-    run=function(){};
-    show=function(){};
 }
 
 export default class PagedArray<T> extends Array implements PageInfo {
@@ -90,8 +74,7 @@ export default class PagedArray<T> extends Array implements PageInfo {
     let model:Options={
       size:100,
       clientPaging:false,
-      run:undefined,
-      progress:undefined,
+      run:undefined
     };
     
     if(typeof options=='function'){
@@ -175,15 +158,19 @@ export default class PagedArray<T> extends Array implements PageInfo {
     return false;
   }
 
-  load(progress?:Progress|ProgressFunction){
+  goTo(pageNumber:number){
+    if(pageNumber>0 && pageNumber<this.pageTotal-1 ){
+      this.config.current=pageNumber;
+      this.load();
+      return true;
+    }
+    return false;
+  }
+
+  load(){
     this.length = 0;
-    if(!progress || typeof(progress)=='function')
-      progress = new Progress(this.config.progress)
-    progress=<Progress>progress;
+   
 
-    progress.start(this.pageEnd-this.pageStart);    
-
-  
     //convert requests to match paging
     if(this.config.clientPaging){
       let result;
@@ -195,7 +182,7 @@ export default class PagedArray<T> extends Array implements PageInfo {
       let mainPromise=Promise.resolve(result);
       for(let id=0;id<this.config.size;id++){
         this.push(genPromise(id,mainPromise));
-        progress.run();
+       
       }
 
       function genPromise(id:number,promise:Promise<any>){
@@ -229,7 +216,6 @@ export default class PagedArray<T> extends Array implements PageInfo {
         }
 
         this.push(result);
-        progress.run();
       }
     }
   }
@@ -258,13 +244,8 @@ export default class PagedArray<T> extends Array implements PageInfo {
       });
     }
     this.config.current=0;
-    //run all parameters
-    let progress = new Progress(this.config.progress);
 
-    progress.start(this.totalItens); 
     this.load();
-
-    
     return recursivePromise(this);
   };
 }
