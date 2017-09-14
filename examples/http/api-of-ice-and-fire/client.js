@@ -23,8 +23,8 @@ const options ={
   }
 }
 
-//load two pages
-let array = new PagedArray(2,options);
+//load two pages (passing number 100 tells that our final array has 100 itens)
+let array = new PagedArray(100,options);
 
 //load first page with 50 characters
 // array.load();
@@ -37,15 +37,6 @@ let array = new PagedArray(2,options);
 // array.next();
 // show(array[0],2)
 
-array.forEach(function(promise){
-  promise.then(function(data){
-    console.log((data.name?data.name:data.aliases)+' p: '+page);
-  })
-  
+array.forEach(function(data,id,arr,info){
+  console.log(info.pageCurrent+1+'-'+id+': '+(data.name?data.name:data.aliases));
 });
-
-function show(promisse,page){
-  promisse.then(function(data){
-    console.log((data.name?data.name:data.aliases)+' p: '+page)
-  });
-}

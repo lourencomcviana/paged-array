@@ -54,11 +54,11 @@ class Progress{
     show=function(){};
 }
 
-export default class PagedArray extends Array implements PageInfo {
+export default class PagedArray<T> extends Array implements PageInfo {
 
   private config :Config;
   private parameterList :Array<any> ;
-  private parameterNumber:number;
+  private parameterLength:number;
 
   constructor(parameter :Array<any>|number ,options:Options|RunFunction) {
     super();
@@ -66,7 +66,7 @@ export default class PagedArray extends Array implements PageInfo {
 
     this.config.current=0;
     if(typeof parameter=='number'){
-      this.parameterNumber=<number>parameter; 
+      this.parameterLength=<number>parameter; 
     }else{
       this.parameterList=<Array<any>>parameter;
     }
@@ -74,7 +74,7 @@ export default class PagedArray extends Array implements PageInfo {
 
   }
   
-  private genInfo():PageInfo{
+  public info():PageInfo{
     return {
       parameters:this.parameters,
       pageSize:this.pageSize,
@@ -113,6 +113,10 @@ export default class PagedArray extends Array implements PageInfo {
       return this.parameterList;
   }
 
+  get totalItens():number {
+    return this.parameterLength?this.parameterLength: this.parameterList.length;
+}
+
   get pageSize() {
       return this.config.size;
   }
@@ -122,9 +126,7 @@ export default class PagedArray extends Array implements PageInfo {
   }
 
   get pageTotal() {
-    if(this.parameterNumber)
-      return this.parameterNumber;
-    return Math.ceil(this.parameters.length/this.pageSize);
+    return Math.ceil(this.totalItens/this.pageSize);
   }
   
   get pageItemRange() {
@@ -142,7 +144,7 @@ export default class PagedArray extends Array implements PageInfo {
 
   get pageEnd() {
     let end=this.pageStart+this.pageSize;
-    let paramLength= this.parameterNumber?this.parameterNumber:this.parameters.length;
+    let paramLength= this.parameterLength?this.parameterLength:this.parameters.length;
     return end>paramLength?paramLength:end;
   }
 
@@ -185,10 +187,10 @@ export default class PagedArray extends Array implements PageInfo {
     //convert requests to match paging
     if(this.config.clientPaging){
       let result;
-      if(this.parameterNumber){
-        result=this.config.run(this.parameterNumber,this.genInfo())
+      if(this.parameterLength){
+        result=this.config.run(this.pageCurrent,this.info())
       }else{
-        result=this.config.run(this.parameterList[this.pageCurrent],this.genInfo())
+        result=this.config.run(this.parameterList[this.pageCurrent],this.info())
       }
       let mainPromise=Promise.resolve(result);
       for(let id=0;id<this.config.size;id++){
@@ -216,10 +218,10 @@ export default class PagedArray extends Array implements PageInfo {
         let result:string |number | object | Promise<any>;
 
         try{
-          if(this.parameterNumber){
-            result=this.config.run(this.parameterNumber,this.genInfo())
+          if(this.parameterLength){
+            result=this.config.run(idItem,this.info())
           }else{
-            result = this.config.run(this.parameterList[idItem],this.genInfo());
+            result = this.config.run(this.parameterList[idItem],this.info());
           }
          
         }catch(e){
@@ -232,14 +234,23 @@ export default class PagedArray extends Array implements PageInfo {
     }
   }
 
-  forEach(callbackfn:any,thisArg?:any): Promise<any>{
+  forEach(callbackfn:(value: T, index: number, array: T[],info?:PageInfo) => void,thisArg?:any): Promise<any>{
     
-    function recursivePromise(arr:PagedArray): Promise<any>{
+    function recursivePromise(arr:PagedArray<T>): Promise<any>{
       //walk from page to page
+
+      let x=<Array<any>> arr;
       return Promise.all(arr)
       .then(function(data){
+        function callBackInterceptor(
+          value: T, index: number, array: T[]
+          //callbackfn:(value: T, index: number, array: T[],info?:PageInfo) => void){
+        ){
+          callbackfn(value,index,array,arr.info());
+        }
         //data is not a paged-array, it is a normal array
-        data.forEach(callbackfn,thisArg);
+        
+        data.forEach(callBackInterceptor,thisArg);
         if(arr.next()){
           return recursivePromise(arr);
         }
@@ -250,7 +261,7 @@ export default class PagedArray extends Array implements PageInfo {
     //run all parameters
     let progress = new Progress(this.config.progress);
 
-    progress.start(this.parameters.length); 
+    progress.start(this.totalItens); 
     this.load();
 
     
