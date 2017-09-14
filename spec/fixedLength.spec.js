@@ -1,6 +1,6 @@
 const PagedArray= require("../bin/PagedArray");
 
-const dummyRun =function(data,val){
+const dummyRun =function(data,info){
   return new Promise(function(resolve,reject){
     setTimeout(function(){
       resolve(data);
@@ -13,22 +13,10 @@ const dummyRun =function(data,val){
 var arr;
 
 beforeEach(function() {
-  arr=new PagedArray.default([1,2,3],{size:2,run:dummyRun});
+  arr=new PagedArray.default(3,{size:2,run:dummyRun});
 });
 
-describe("paging-create", function () {
-  it("should create a new instance of the array", function () {
-    expect(arr.constructor.name).toBe("PagedArray");
-  });
-
-  it("should load the first page of the array", function () {
-    expect(arr.length).toBe(0);
-    arr.load();
-    expect(arr.length).toBe(2);
-  });
-});
-
-describe("paging-walking", function () {
+describe("fixedlen-paging-walking", function () {
 
   beforeEach(function() {
     arr.load();
@@ -40,7 +28,11 @@ describe("paging-walking", function () {
 
   it("should read the second value", function (done) {
     arr[1].then(function(data){
-      expect(data).toBe(2);
+      expect(data).toBe(1);
+      done();
+    });
+    arr[0].then(function(data,info){
+      expect(data).toBe(0);
       done();
     });
   });
@@ -53,20 +45,21 @@ describe("paging-walking", function () {
   it("should read the first value of the second page", function (done) {    
     arr.next();
     arr[0].then(function(data){
-      expect(data).toBe(3);
+      expect(data).toBe(2);
       done();
     });
   });
 });
 
-describe("for-each", function () {
+describe("fixedlen-for-each", function () {
   let promise;
 
   it("should return all itens of the array", function (done) {
     let count=0;
     promise=arr.forEach(function(element,id) {
-      count++;
+      
       expect(element).toBe(count);
+      count++;
     }, this);
 
     promise.then(function(end){
@@ -78,7 +71,7 @@ describe("for-each", function () {
   it("the last page of the array should be [3]", function (done) {
     promise.then(function(end){
       expect(typeof end).toBe("object");
-      expect(end[0]).toBe(3);
+      expect(end[0]).toBe(2);
       done();
     });
   });
