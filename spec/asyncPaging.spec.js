@@ -13,7 +13,7 @@ const dummyRun =function(data,val){
 var arr;
 
 beforeEach(function() {
-  arr=new PagedArray.default([1,2,3],{size:2,run:dummyRun});
+  arr=new PagedArray([1,2,3],{size:2,run:dummyRun});
 });
 
 describe("paging-create", function () {

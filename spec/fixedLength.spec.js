@@ -13,7 +13,7 @@ const dummyRun =function(data,info){
 var arr;
 
 beforeEach(function() {
-  arr=new PagedArray.default(3,{size:2,run:dummyRun});
+  arr=new PagedArray(30,{size:20,run:dummyRun});
 });
 
 describe("fixedlen-paging-walking", function () {
@@ -45,7 +45,7 @@ describe("fixedlen-paging-walking", function () {
   it("should read the first value of the second page", function (done) {    
     arr.next();
     arr[0].then(function(data){
-      expect(data).toBe(2);
+      expect(data).toBe(20);
       done();
     });
   });
@@ -63,17 +63,22 @@ describe("fixedlen-for-each", function () {
     }, this);
 
     promise.then(function(end){
-      expect(count).toBe(3);
+      expect(count).toBe(30);
       done();
     });
   });
 
-  it("the last page of the array should be [3]", function (done) {
+  it("the return of the promise must be an object", function (done) {
     promise.then(function(end){
       expect(typeof end).toBe("object");
-      expect(end[0]).toBe(2);
       done();
     });
   });
-  
+
+  it("the last element of the last page of the array should be 29", function (done) {
+    promise.then(function(end){
+      expect(end[9]).toBe(29);
+      done();
+    });
+  });
 });

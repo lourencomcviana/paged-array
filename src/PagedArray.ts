@@ -24,7 +24,7 @@ interface RunFunction{
 
 interface Options{
     [index: string]: any;
-    clientPaging?:boolean,
+    externalPaging?:boolean,
     size?:number;
     run:RunFunction;
 }
@@ -38,11 +38,17 @@ function instanceOfRunFunction(object: any): object is RunFunction{
     return true;
 }
 
-export default class PagedArray<T> extends Array implements PageInfo {
 
-  private config :Config;
-  private parameterList :Array<any> ;
+
+class PagedArray<T> extends Array implements PageInfo {
+
+  protected config :Config;
+  protected parameterList :Array<any> ;
   private parameterLength:number;
+  
+  public static externalPaged<T> (options:Options):PagedArray<T>{
+    return 
+  }
 
   constructor(parameter :Array<any>|number ,options:Options|RunFunction) {
     super();
@@ -73,7 +79,7 @@ export default class PagedArray<T> extends Array implements PageInfo {
   static ProcessOptions(options:Options|RunFunction) :Options{
     let model:Options={
       size:100,
-      clientPaging:false,
+      externalPaging:false,
       run:undefined
     };
     
@@ -167,12 +173,26 @@ export default class PagedArray<T> extends Array implements PageInfo {
     return false;
   }
 
+  private static genPromise(id:number,promise:Promise<any>){
+    return new Promise(function(accept,reject){
+      promise
+        .then(function(data){
+          try{
+            accept(data[id]);
+          }catch(err){
+            reject(err);
+          }
+        }).catch(function(err){
+          reject(err);
+        })
+    });
+  }
+
   load(){
     this.length = 0;
-   
 
     //convert requests to match paging
-    if(this.config.clientPaging){
+    if(this.config.externalPaging){
       let result;
       if(this.parameterLength){
         result=this.config.run(this.pageCurrent,this.info())
@@ -180,26 +200,12 @@ export default class PagedArray<T> extends Array implements PageInfo {
         result=this.config.run(this.parameterList[this.pageCurrent],this.info())
       }
       let mainPromise=Promise.resolve(result);
-      for(let id=0;id<this.config.size;id++){
-        this.push(genPromise(id,mainPromise));
-       
+      let size=this.pageEnd-this.pageStart;
+      for(let id=0;id<size;id++){
+        this.push(PagedArray.genPromise(id,mainPromise));
       }
 
-      function genPromise(id:number,promise:Promise<any>){
-        
-        return new Promise(function(accept,reject){
-          promise
-            .then(function(data){
-              try{
-                accept(data[id]);
-              }catch(err){
-                reject(err);
-              }
-            }).catch(function(err){
-              reject(err);
-            })
-        });
-      }
+      
     }else{
       for(let idItem=this.pageStart;idItem<this.pageEnd;idItem++){
         let result:string |number | object | Promise<any>;
@@ -249,3 +255,43 @@ export default class PagedArray<T> extends Array implements PageInfo {
     return recursivePromise(this);
   };
 }
+
+
+class ExternalPagedArray<T> extends PagedArray<T>{
+  constructor(parameter :Array<any>|number ,options:Options|RunFunction) {
+    super(parameter,options);
+  
+
+  }
+
+  private static gen(id:number,promise:Promise<any>){
+    return new Promise(function(accept,reject){
+      promise
+        .then(function(data){
+          try{
+            accept(data[id]);
+          }catch(err){
+            reject(err);
+          }
+        }).catch(function(err){
+          reject(err);
+        })
+    });
+  }
+
+  load(){
+    let result;
+    if(this.totalItens){
+      result=this.config.run(this.pageCurrent,this.info())
+    }else{
+      result=this.config.run(this.parameterList[this.pageCurrent],this.info())
+    }
+    let mainPromise=Promise.resolve(result);
+    let size=this.pageEnd-this.pageStart;
+    for(let id=0;id<size;id++){
+      this.push(ExternalPagedArray.gen(id,mainPromise));
+    }
+  }
+}
+
+export=PagedArray;

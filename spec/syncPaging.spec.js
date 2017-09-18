@@ -7,7 +7,7 @@ const dummyRun =function(data,val){
 var obj;
 const dummyPageArray=function(){
   if(!obj) 
-    obj=new PagedArray.default(testArr,{size:2,run:dummyRun});
+    obj=new PagedArray(testArr,{size:2,run:dummyRun});
   return obj;
 }
 
