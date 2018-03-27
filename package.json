@@ -2,7 +2,7 @@
   "name": "paged-array",
   "version": "1.0.0",
   "description": "paged-array is an extension of the basic array class. Enables paging by default and give you tools to make large and lazy data processing easyer",
-  "main": "./bin/PagedArray.js",
+  "main": "./paged-array.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,9 +22,11 @@
   },
   "dependencies": {
     "bluebird": "^3.5.0",
+    "express": "^4.16.2",
     "progress": "^2.0.0",
     "promise": "^8.0.1",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "request-promise": "^4.2.2"
   },
   "homepage": "https://github.com/lourencomcviana/paged-array#readme",
   "devDependencies": {

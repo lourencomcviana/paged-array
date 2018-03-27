@@ -37,7 +37,7 @@ describe("paging-walking", function () {
   it("should be in the first page", function () {
     expect(arr.pageCurrent).toBe(0);
   });
-
+  
   it("should read the second value", function (done) {
     arr[1].then(function(data){
       expect(data).toBe(2);

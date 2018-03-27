@@ -12,13 +12,9 @@ var gulpConfig={
     specFolder:'spec/**/*.js'
 }
 
-gulp.task('clean', function () {
-
-    return gulp.src(gulpConfig.destDir, {read: false})
-        .pipe(rimraf());
-});
-
-gulp.task("compile",['clean'], function () {
+//cd C:\javaTools\wls12212\oracle_common\plugins\maven\com\oracle\maven\oracle-maven-sync\12.2.1
+//mvn install:install-file-DpomFile=oracle-maven-sync-12.2.1 -Dfile=oracle-maven-sync-12.2.1.jar
+gulp.task("compile",[], function () {
     return   tsProject.src()
       .pipe(sourcemaps.init())
       .pipe(tsProject()).js

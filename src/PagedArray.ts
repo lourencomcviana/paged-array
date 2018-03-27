@@ -1,7 +1,7 @@
 import Promise =require( 'bluebird');
+let x= require('../package-lock.json');
 
-
-
+console.log(x);
 interface ItemRange{
   readonly min:number,
   readonly max:number
