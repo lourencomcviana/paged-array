@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Promise = require("bluebird");
 let x = require('../package-lock.json');
-console.log(x);
 function instanceOfRunFunction(object) {
     return true;
 }

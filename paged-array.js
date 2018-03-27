@@ -1,3 +1,3 @@
 const pagedArray = require("./dist/PagedArray")
 
-exports=pagedArray.default;
+module.exports= pagedArray.default;
