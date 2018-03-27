@@ -9,9 +9,9 @@
         "noImplicitAny": true,
         "target": "es6",
         "module": "commonjs",
-        "outDir": "bin",
+        "outDir": "dist",
         "rootDir": "src",
         "sourceMap":true
     },
-    "exclude": [ "node_modules", "bin" ] 
+    "exclude": [ "node_modules", "bin","dist" ] 
 }
